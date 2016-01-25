@@ -14,7 +14,7 @@ const double PI = 3.14159265359;
 void move(double speed, double distance, bool isForward);
 void rotate(double angular_speed, double angle, bool cloclwise);
 void poseCallback(const turtlesim::Pose::ConstPtr & pose_message);
-void circle(double radius, double turn_angle, bool clockwise);
+//void circle(double radius, double turn_angle, bool clockwise);
 
 int main(int argc, char **argv)
 {
@@ -29,16 +29,11 @@ bool isForward, clockwise;
 velocity_publisher = n.advertise<geometry_msgs::Twist>("/turtle1/cmd_vel", 1000);
 pose_subscriber = n.subscribe("/turtle1/pose", 10, poseCallback);
 ros::Rate loop_rate(0.5);
-rotate(2,2/PI,0);
-move(1,5,1);
 
-for(int i = 0; i < 2; i++){
-rotate(2, 2/PI, 0);
-circle(2,PI,0);
+rotate(2,4/PI,0);
+move(2,5,1);
+rotate(2,4/PI,1);
 
-}
-
-rotate(2,2*PI,1);
 
 ros::spin();
 
@@ -105,7 +100,7 @@ vel_msg.angular.z =0;
 velocity_publisher.publish(vel_msg);
 }
 
-void circle(double radius, double turn_angle, bool clockwise)
+/*void circle(double radius, double turn_angle, bool clockwise)
 {
 double t0,t1;
 double current_angle = 0.0;
@@ -142,6 +137,7 @@ vel_msg.angular.z = 0;
 vel_msg.linear.x = 0;
 velocity_publisher.publish(vel_msg);
 }
+*/
 void poseCallback(const turtlesim::Pose::ConstPtr & pose_message)
 {
 turtlesim_pose.x=pose_message->x;
