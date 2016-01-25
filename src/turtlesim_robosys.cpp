@@ -14,7 +14,7 @@ const double PI = 3.14159265359;
 void move(double speed, double distance, bool isForward);
 void rotate(double angular_speed, double angle, bool cloclwise);
 void poseCallback(const turtlesim::Pose::ConstPtr & pose_message);
-void circle(double radius, double turn_angle, bool clockwise)
+//void moveGoal(turtlesim::Pose goal_pose, double distance_tolerance);
 
 int main(int argc, char **argv)
 {
@@ -34,12 +34,11 @@ int main(int argc, char **argv)
 
     for(int i = 0; i < 2; i++){
       rotate(2, 2/PI, 0);
-      circle(1,PI,0);
-      
+      move(3, 10, 1);
     }
 
     rotate(2,2PI,1);
-
+    
     ros::spin();
 
     return 0;
@@ -105,43 +104,35 @@ void rotate (double angular_speed, double relative_angle, bool clockwise)
     velocity_publisher.publish(vel_msg);
 }
 
-void circle(double radius, double turn_angle, bool clockwise)
+/*
+void moveGoal(turtlesim::Pose goal_pose, double distance_tolerance)
 {
-     double t0;
-     double current_angle = 0.0;
+    //We implement a Proportional Controller. We need to go from (x,y) to (x',y'). Then, linear velocity v' = K ((x'-x)^2 + (y'-y)^2)^0.5 where K is the constant and ((x'-x)^2 + (y'-y)^2)^0.5 is the Euclidian distance. The steering angle theta = tan^-1(y'-y)/(x'-x) is the angle between these 2 points.
+    geometry_msgs::Twist vel_msg;
 
-     geometry_msgs::Twist vel_msg;
-     //set a rondom linear velocity in the x-axis
-     vel_msg.linear.x = 0;
-     vel_msg.linear.y = 0;
-     vel_msg.linear.z = 0;
-     //set a rondom angular velocity inthe y-axis
-     vel_msg.angular.x = 0;
-     vel_msg.angular.y = 0;
-     vel_msg.angular.z = 0;
-     t0 = ros::Time::now().toSec();
-     ros::Rate loop_rate(1000);
+    ros::Rate loop_rate(10);
+    do{
+        //linear velocity
+        vel_msg.linear.x = 1.5*getDistance(turtlesim_pose.x, turtlesim_pose.y, goal_pose.x, goal_pose.y);
+        vel_msg.linear.y = 0;
+        vel_msg.linear.z = 0;
+        //angular velocity
+        vel_msg.angular.x = 0;
+        vel_msg.angular.y = 0;
+        vel_msg.angular.z = 4*(atan2(goal_pose.y - turtlesim_pose.y, goal_pose.x - turtlesim_pose.x)-turtlesim_pose.theta);
 
-     if(clockwise){
-          vel_msg.angular.z = abs(turn_angle);
-          vel_msg.linear.x = abs(radius * PI);
-     }
-     else {
-          vel_msg.angular.z = abs(turn_angle);
-          vel_msg.linear.x = abs(radius * PI);
-     }
+        velocity_publisher.publish(vel_msg);
 
-     do{
-          velocity_publisher.publish(vel_msg);
-          t1 = ros::Time::now().toSec();
-          current_angle = turn_angle * (t1 - t0);
-          loop_rate.sleep();
-     }while(current_angle < turn_angle);
+        ros::spinOnce();
+        loop_rate.sleep();
 
-     vel_msg.angular.z = 0;
-     vel_msg.linear.x = 0;
-     velocity_publisher.publish(vel_msg);
-}
+    }while(getDistance(turtlesim_pose.x, turtlesim_pose.y, goal_pose.x, goal_pose.y)>distance_tolerance);
+    cout<<"end move goal"<<endl;
+    vel_msg.linear.x = 0;
+    vel_msg.angular.z = 0;
+    velocity_publisher.publish(vel_msg);
+
+}*/
 void poseCallback(const turtlesim::Pose::ConstPtr & pose_message)
 {
     turtlesim_pose.x=pose_message->x;
