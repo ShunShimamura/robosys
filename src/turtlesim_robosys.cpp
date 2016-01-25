@@ -29,16 +29,16 @@ int main(int argc, char **argv)
     velocity_publisher = n.advertise<geometry_msgs::Twist>("/turtle1/cmd_vel", 1000);
     pose_subscriber = n.subscribe("/turtle1/pose", 10, poseCallback);
     ros::Rate loop_rate(0.5);
+    rotate(2,PI,0);
+    move(2,10,1);
 
-
-
-        for(int i = 0; i < 10; i++){
-
-        rotate(2, 2/PI, 0);
-        move(3, 10, 1);
-
+    for(int i = 0; i < 2; i++){
+      rotate(2, 2/PI, 0);
+      move(3, 10, 1);
     }
 
+    rotate(2,2PI,1);
+    
     ros::spin();
 
     return 0;
