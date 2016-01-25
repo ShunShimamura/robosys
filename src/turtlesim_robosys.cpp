@@ -14,7 +14,7 @@ const double PI = 3.14159265359;
 void move(double speed, double distance, bool isForward);
 void rotate(double angular_speed, double angle, bool cloclwise);
 void poseCallback(const turtlesim::Pose::ConstPtr & pose_message);
-void circle(double radius, double turn_angle, bool clockwise)
+void circle(double radius, double turn_angle, bool clockwise);
 
 int main(int argc, char **argv)
 {
@@ -38,7 +38,7 @@ circle(2,PI,0);
 
 }
 
-rotate(2,2PI,1);
+rotate(2,2*PI,1);
 
 ros::spin();
 
@@ -107,7 +107,7 @@ velocity_publisher.publish(vel_msg);
 
 void circle(double radius, double turn_angle, bool clockwise)
 {
-double t0;
+double t0,t1;
 double current_angle = 0.0;
 
 geometry_msgs::Twist vel_msg;
