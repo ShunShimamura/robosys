@@ -38,11 +38,24 @@ move(2,2,1);
 
 }
 
+rotate(2,4/PI,1);
+
+move(2,3,1);
+
+for(int i=0; i<4; i++){
+rotate(2,4/PI,0);
 move(2,2,1);
 
+}
+rotate(2,3/PI,1);
 
+move(2,3,1);
 
+for(int i=0; i<4; i++){
+rotate(2,4/PI,0);
+move(2,2,1);
 
+}
 
 ros::spin();
 
